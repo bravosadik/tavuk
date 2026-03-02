@@ -3,255 +3,816 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MathZone 7 | Pro Edition</title>
+<title>MathZone 7 | Oran-Orantı & Denklemler</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --neon-cyan: #00f5ff; --neon-pink: #ff006e; --neon-gold: #ffd700; --neon-green: #39ff14;
-    --dark-bg: #050510; --card-bg: rgba(10,10,40,0.95); --border-glow: rgba(0,245,255,0.4);
+    --neon-cyan: #00f5ff;
+    --neon-pink: #ff006e;
+    --neon-gold: #ffd700;
+    --neon-green: #39ff14;
+    --dark-bg: #050510;
+    --card-bg: rgba(10,10,40,0.95);
+    --border-glow: rgba(0,245,255,0.4);
   }
+
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: 'Rajdhani', sans-serif; background: var(--dark-bg); min-height: 100vh; overflow-x: hidden; color: #fff; }
 
-  /* --- ANIMATED BACKGROUND & PARTICLES --- */
-  .bg-grid { position: fixed; inset:0; z-index:0; background-image: linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px); background-size: 40px 40px; animation: gridMove 20s linear infinite; }
+  body {
+    font-family: 'Rajdhani', sans-serif;
+    background: var(--dark-bg);
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #fff;
+  }
+
+  /* ── ANIMATED BACKGROUND ── */
+  .bg-grid {
+    position: fixed; inset:0; z-index:0;
+    background-image:
+      linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridMove 20s linear infinite;
+  }
   @keyframes gridMove { from{background-position:0 0} to{background-position:40px 40px} }
+
+  .bg-orb {
+    position: fixed; border-radius:50%; filter:blur(80px); z-index:0; pointer-events:none;
+  }
+  .orb1 { width:400px; height:400px; background:rgba(0,245,255,0.08); top:-100px; left:-100px; animation:orbFloat1 8s ease-in-out infinite; }
+  .orb2 { width:300px; height:300px; background:rgba(255,0,110,0.08); bottom:-50px; right:-50px; animation:orbFloat2 10s ease-in-out infinite; }
+  .orb3 { width:200px; height:200px; background:rgba(255,215,0,0.06); top:50%; left:50%; animation:orbFloat3 6s ease-in-out infinite; }
+  @keyframes orbFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,20px)} }
+  @keyframes orbFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,30px)} }
+  @keyframes orbFloat3 { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.3)} }
+
+  /* ── PARTICLES ── */
   .particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
-  .particle { position:absolute; width:2px; height:2px; border-radius:50%; background:var(--neon-cyan); animation:particleFly linear infinite; }
-  @keyframes particleFly { 0%{transform:translateY(100vh) translateX(0); opacity:0} 100%{transform:translateY(-10vh) translateX(var(--dx)); opacity:0} }
+  .particle {
+    position:absolute; width:2px; height:2px; border-radius:50%;
+    background:var(--neon-cyan); animation:particleFly linear infinite;
+  }
+  @keyframes particleFly {
+    0%{transform:translateY(100vh) translateX(0); opacity:0}
+    10%{opacity:1}
+    90%{opacity:1}
+    100%{transform:translateY(-10vh) translateX(var(--dx)); opacity:0}
+  }
 
-  /* --- UI COMPONENTS --- */
-  .container { position: relative; z-index:10; max-width: 700px; margin:0 auto; padding: 20px; min-height: 100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .logo { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 8vw, 3.5rem); font-weight: 900; text-align: center; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink), var(--neon-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px rgba(0,245,255,0.5)); margin-bottom: 20px; }
-  
-  .card { background: var(--card-bg); border: 1px solid var(--border-glow); border-radius: 20px; padding: 40px; width: 100%; box-shadow: 0 0 40px rgba(0,245,255,0.1); backdrop-filter: blur(20px); position: relative; overflow: hidden; }
-  
-  /* --- JOKER & LEADERBOARD --- */
-  .joker-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
-  .joker-btn { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--neon-gold); color: var(--neon-gold); padding: 8px 20px; border-radius: 30px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; transition: 0.3s; }
-  .joker-btn:hover:not(:disabled) { background: var(--neon-gold); color: #000; box-shadow: 0 0 15px var(--neon-gold); }
-  .joker-btn:disabled { opacity: 0.2; filter: grayscale(1); }
+  /* ── LAYOUT ── */
+  .container {
+    position: relative; z-index:10;
+    max-width: 700px; margin:0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
 
-  .leaderboard { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
-  .lb-title { font-family: 'Bebas Neue'; letter-spacing: 3px; color: var(--neon-gold); text-align: center; margin-bottom: 15px; }
-  .lb-row { display: flex; justify-content: space-between; padding: 8px 15px; background: rgba(255,255,255,0.03); margin-bottom: 5px; border-radius: 8px; font-size: 0.9rem; }
+  /* ── LOGO ── */
+  .logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 8px;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink), var(--neon-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(0,245,255,0.5));
+    animation: logoPulse 3s ease-in-out infinite;
+  }
+  @keyframes logoPulse {
+    0%,100%{filter:drop-shadow(0 0 20px rgba(0,245,255,0.5))}
+    50%{filter:drop-shadow(0 0 35px rgba(255,0,110,0.7))}
+  }
 
-  /* --- GAME ELEMENTS --- */
-  .text-input { width:100%; padding:15px; background:rgba(0,245,255,0.05); border: 1px solid rgba(0,245,255,0.3); border-radius:10px; color:#fff; font-size:1.2rem; outline:none; transition: 0.3s; }
-  .gender-btn { flex:1; padding:20px; border:2px solid rgba(255,255,255,0.1); border-radius:14px; background:rgba(255,255,255,0.03); cursor:pointer; color:#fff; font-family:'Bebas Neue'; font-size:1.2rem; transition: 0.3s; }
-  .gender-btn.selected { border-color: var(--neon-cyan); background: rgba(0,245,255,0.15); box-shadow: 0 0 20px var(--neon-cyan); }
-  
-  .option-btn { padding:18px; border:1px solid rgba(255,255,255,0.1); border-radius:12px; background:rgba(255,255,255,0.03); color:#fff; cursor:pointer; font-weight:600; font-family:'Rajdhani'; font-size:1.1rem; transition: 0.2s; }
-  .option-btn.correct { background: var(--neon-green) !important; color:#000; box-shadow: 0 0 20px var(--neon-green); }
-  .option-btn.wrong { background: var(--neon-pink) !important; box-shadow: 0 0 20px var(--neon-pink); }
-  .option-btn.hidden-opt { opacity: 0; pointer-events: none; }
+  .subtitle {
+    font-family: 'Bebas Neue', cursive;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.4);
+    font-size: 1rem;
+    text-align:center;
+    margin-bottom: 40px;
+  }
 
-  .start-btn { width:100%; padding:18px; background: var(--neon-cyan); border:none; border-radius:12px; font-family:'Orbitron'; font-weight:900; cursor:pointer; margin-top:30px; color:#000; letter-spacing:2px; }
-  .hidden { display: none !important; }
-  .fade-in { animation: fadeIn 0.5s ease; }
-  @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
+  /* ── CARD ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-glow);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    box-shadow: 0 0 40px rgba(0,245,255,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-pink), transparent);
+    animation: scanLine 3s linear infinite;
+  }
+  @keyframes scanLine { 0%{opacity:0.3} 50%{opacity:1} 100%{opacity:0.3} }
+
+  /* ── INPUTS & LABELS ── */
+  .field-label {
+    display:block;
+    font-family:'Bebas Neue', cursive;
+    letter-spacing:4px;
+    font-size:0.9rem;
+    color:var(--neon-cyan);
+    margin-bottom:10px;
+    margin-top:20px;
+  }
+
+  .text-input {
+    width:100%; padding:14px 20px;
+    background:rgba(0,245,255,0.05);
+    border: 1px solid rgba(0,245,255,0.3);
+    border-radius:10px;
+    color:#fff;
+    font-family:'Rajdhani',sans-serif;
+    font-size:1.2rem;
+    font-weight:600;
+    outline:none;
+    transition: all 0.3s;
+    letter-spacing:2px;
+  }
+  .text-input:focus {
+    border-color:var(--neon-cyan);
+    box-shadow:0 0 20px rgba(0,245,255,0.2);
+    background:rgba(0,245,255,0.08);
+  }
+  .text-input::placeholder { color:rgba(255,255,255,0.2); }
+
+  /* ── GENDER BUTTONS ── */
+  .gender-row { display:flex; gap:15px; margin-top:8px; }
+  .gender-btn {
+    flex:1; padding:18px;
+    border:2px solid rgba(255,255,255,0.1);
+    border-radius:14px;
+    background:rgba(255,255,255,0.03);
+    cursor:pointer; color:#fff;
+    font-family:'Bebas Neue',cursive;
+    font-size:1.2rem;
+    letter-spacing:3px;
+    transition: all 0.3s;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+  }
+  .gender-btn .icon { font-size:2.5rem; }
+  .gender-btn:hover { transform:translateY(-3px); }
+  .gender-btn.boy { border-color:rgba(0,150,255,0.4); }
+  .gender-btn.boy:hover, .gender-btn.boy.selected {
+    border-color:#0096ff; background:rgba(0,150,255,0.15);
+    box-shadow:0 0 25px rgba(0,150,255,0.3);
+  }
+  .gender-btn.girl { border-color:rgba(255,0,110,0.4); }
+  .gender-btn.girl:hover, .gender-btn.girl.selected {
+    border-color:var(--neon-pink); background:rgba(255,0,110,0.15);
+    box-shadow:0 0 25px rgba(255,0,110,0.3);
+  }
+
+  /* ── START BUTTON ── */
+  .start-btn {
+    width:100%; margin-top:30px;
+    padding:18px;
+    background: linear-gradient(135deg, var(--neon-cyan), rgba(0,180,200,0.8));
+    border:none; border-radius:12px;
+    font-family:'Orbitron',sans-serif;
+    font-size:1.1rem; font-weight:700;
+    letter-spacing:4px;
+    color: var(--dark-bg);
+    cursor:pointer;
+    transition:all 0.3s;
+    position:relative; overflow:hidden;
+  }
+  .start-btn:hover {
+    transform:translateY(-3px);
+    box-shadow:0 10px 40px rgba(0,245,255,0.4);
+  }
+  .start-btn::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform:translateX(-100%); transition:transform 0.6s;
+  }
+  .start-btn:hover::after { transform:translateX(100%); }
+
+  /* ── GENIUS SCREEN ── */
+  .genius-screen {
+    text-align:center; padding:20px 0;
+  }
+  .genius-emoji { font-size:5rem; animation:bounce 1s ease-in-out infinite; margin-bottom:20px; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
+  .genius-title {
+    font-family:'Orbitron',sans-serif; font-size:1.8rem; font-weight:900;
+    background:linear-gradient(135deg, var(--neon-gold), #ff8c00, var(--neon-pink));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:15px; line-height:1.3;
+  }
+  .genius-name {
+    font-family:'Bebas Neue',cursive; font-size:2rem; letter-spacing:5px;
+    color:var(--neon-gold);
+    text-shadow:0 0 20px rgba(255,215,0,0.7);
+    animation:glow 2s ease-in-out infinite;
+  }
+  @keyframes glow { 0%,100%{text-shadow:0 0 20px rgba(255,215,0,0.7)} 50%{text-shadow:0 0 40px rgba(255,215,0,1), 0 0 80px rgba(255,215,0,0.5)} }
+  .crown-row { font-size:2rem; margin:15px 0; letter-spacing:10px; animation:crownSpin 4s linear infinite; display:inline-block; }
+  @keyframes crownSpin { 0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)} }
+
+  /* ── GAME SCREEN ── */
+  .game-header {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:25px;
+  }
+  .player-info { display:flex; align-items:center; gap:12px; }
+  .player-avatar {
+    width:45px; height:45px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem;
+    border:2px solid var(--neon-cyan);
+    box-shadow:0 0 15px rgba(0,245,255,0.3);
+  }
+  .player-name-display {
+    font-family:'Bebas Neue',cursive; font-size:1.2rem; letter-spacing:3px;
+    color:var(--neon-cyan);
+  }
+
+  .score-area { text-align:right; }
+  .score-label { font-size:0.7rem; letter-spacing:3px; color:rgba(255,255,255,0.4); }
+  .score-value {
+    font-family:'Orbitron',sans-serif; font-size:1.8rem; font-weight:900;
+    color:var(--neon-gold);
+    text-shadow:0 0 15px rgba(255,215,0,0.5);
+  }
+
+  /* progress bar */
+  .progress-wrap {
+    height:6px; background:rgba(255,255,255,0.05);
+    border-radius:3px; margin-bottom:25px; overflow:hidden;
+    border:1px solid rgba(255,255,255,0.05);
+  }
+  .progress-fill {
+    height:100%; border-radius:3px;
+    background:linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+    transition:width 0.5s ease;
+    box-shadow:0 0 10px rgba(0,245,255,0.5);
+  }
+
+  .q-counter {
+    font-size:0.8rem; letter-spacing:3px; color:rgba(255,255,255,0.4);
+    text-align:center; margin-bottom:15px; width: 100%;
+  }
+
+  /* ── QUESTION ── */
+  .question-box {
+    background:rgba(0,245,255,0.03);
+    border:1px solid rgba(0,245,255,0.15);
+    border-radius:14px;
+    padding:24px;
+    margin-bottom:25px;
+    position:relative;
+  }
+  .question-text {
+    font-size:clamp(1rem,3vw,1.3rem);
+    font-weight:600;
+    line-height:1.6;
+    color:#fff;
+    text-align:center;
+  }
+  .question-text .highlight {
+    color:var(--neon-cyan);
+    font-family:'Orbitron',sans-serif; font-size:0.9em;
+  }
+
+  /* ── OPTIONS ── */
+  .options-grid {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .option-btn {
+    padding:16px 12px;
+    border:2px solid rgba(255,255,255,0.1);
+    border-radius:12px;
+    background:rgba(255,255,255,0.03);
+    color:#fff;
+    font-family:'Rajdhani',sans-serif;
+    font-size:1.1rem; font-weight:600;
+    cursor:pointer;
+    transition:all 0.25s;
+    text-align:center;
+    letter-spacing:1px;
+  }
+  .option-btn:hover:not(:disabled) {
+    border-color:var(--neon-cyan);
+    background:rgba(0,245,255,0.08);
+    transform:translateY(-2px);
+    box-shadow:0 5px 20px rgba(0,245,255,0.2);
+  }
+  .option-btn.correct {
+    border-color:var(--neon-green) !important;
+    background:rgba(57,255,20,0.15) !important;
+    box-shadow:0 0 25px rgba(57,255,20,0.3) !important;
+    color:var(--neon-green) !important;
+  }
+  .option-btn.wrong {
+    border-color:var(--neon-pink) !important;
+    background:rgba(255,0,110,0.15) !important;
+    box-shadow:0 0 25px rgba(255,0,110,0.2) !important;
+    color:var(--neon-pink) !important;
+  }
+  .option-btn:disabled { cursor:not-allowed; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    text-align:center; margin-top:18px;
+    font-family:'Bebas Neue',cursive;
+    font-size:1.4rem; letter-spacing:4px;
+    min-height:35px;
+    transition:all 0.3s;
+  }
+  .feedback.correct-fb { color:var(--neon-green); text-shadow:0 0 15px rgba(57,255,20,0.5); }
+  .feedback.wrong-fb { color:var(--neon-pink); text-shadow:0 0 15px rgba(255,0,110,0.5); }
+
+  .next-btn {
+    width:100%; margin-top:20px;
+    padding:14px;
+    background:rgba(0,245,255,0.1);
+    border:1px solid rgba(0,245,255,0.3);
+    border-radius:10px;
+    color:var(--neon-cyan);
+    font-family:'Bebas Neue',cursive;
+    font-size:1.1rem; letter-spacing:4px;
+    cursor:pointer;
+    transition:all 0.3s;
+    display:none;
+  }
+  .next-btn:hover {
+    background:rgba(0,245,255,0.2);
+    box-shadow:0 0 20px rgba(0,245,255,0.2);
+  }
+
+  /* ── RESULT SCREEN ── */
+  .result-screen { text-align:center; }
+  .result-score-big {
+    font-family:'Orbitron',sans-serif; font-size:5rem; font-weight:900;
+    background:linear-gradient(135deg, var(--neon-gold), var(--neon-pink));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    line-height:1;
+    animation:scalePop 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+  }
+  @keyframes scalePop { 0%{transform:scale(0)} 100%{transform:scale(1)} }
+  .result-of { font-size:1rem; color:rgba(255,255,255,0.3); margin:5px 0 20px; letter-spacing:3px; }
+  .result-msg {
+    font-size:1.3rem; color:rgba(255,255,255,0.8);
+    margin-bottom:25px; line-height:1.5;
+  }
+  .result-stars { font-size:2.5rem; letter-spacing:8px; margin-bottom:25px; }
+
+  .replay-btn {
+    padding:15px 40px;
+    background:linear-gradient(135deg, var(--neon-pink), rgba(200,0,80,0.8));
+    border:none; border-radius:12px;
+    font-family:'Orbitron',sans-serif; font-size:1rem; font-weight:700;
+    letter-spacing:3px; color:#fff;
+    cursor:pointer; transition:all 0.3s;
+  }
+  .replay-btn:hover {
+    transform:translateY(-3px);
+    box-shadow:0 10px 30px rgba(255,0,110,0.4);
+  }
+
+  /* ── TIMER ── */
+  .timer-ring {
+    width:60px; height:60px;
+    position:relative; margin: 0 auto 15px;
+  }
+  .timer-ring svg { transform:rotate(-90deg); }
+  .timer-circle {
+    fill:none; stroke:rgba(0,245,255,0.2); stroke-width:4;
+  }
+  .timer-progress {
+    fill:none; stroke:var(--neon-cyan); stroke-width:4;
+    stroke-dasharray:157; stroke-dashoffset:0;
+    stroke-linecap:round;
+    transition:stroke-dashoffset 1s linear, stroke 0.3s;
+  }
+  .timer-text {
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    font-family:'Orbitron',sans-serif; font-size:0.9rem; font-weight:700;
+    color:var(--neon-cyan);
+  }
+
+  /* ── STREAK ── */
+  .streak-banner {
+    text-align:center; margin-bottom:10px;
+    font-family:'Bebas Neue',cursive; font-size:1rem; letter-spacing:4px;
+    color:var(--neon-gold);
+    height:24px;
+  }
+
+  .hidden { display:none !important; }
+  .fade-in { animation:fadeIn 0.4s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .shake { animation:shake 0.4s ease; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
+
+  .error-msg {
+    color:var(--neon-pink); font-size:0.85rem;
+    text-align:center; margin-top:8px; min-height:20px;
+    letter-spacing:1px;
+  }
 </style>
 </head>
 <body>
 
-<audio id="bgMusic" src="song.mp3" loop></audio>
+<audio id="bgMusic" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
 
 <div class="bg-grid"></div>
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
 <div class="particles" id="particles"></div>
 
 <div class="container">
   <div class="logo">MATHZONE 7</div>
+  <div class="subtitle">ORAN · ORANTILAR · DENKLEMLER</div>
 
   <div class="card fade-in" id="setupScreen">
-    <label style="font-family:'Bebas Neue'; color:var(--neon-cyan); letter-spacing:2px;">KULLANICI ADI</label>
-    <input class="text-input" type="text" id="nameInput" placeholder="Sisteme bir isim girin..." maxlength="15">
-    
-    <div style="margin-top:25px; font-family:'Bebas Neue'; color:var(--neon-cyan); letter-spacing:2px;">ZORLUK SEVİYESİ (CİNSİYET)</div>
-    <div style="display:flex; gap:15px; margin-top:10px;">
-      <button class="gender-btn" id="btnBoy" onclick="selectGender('boy')">ERKEK<br><small style="font-size:0.6rem">KOLAY MOD</small></button>
-      <button class="gender-btn" id="btnGirl" onclick="selectGender('girl')">KIZ<br><small style="font-size:0.6rem">ZOR MOD</small></button>
-    </div>
-    
-    <button class="start-btn" onclick="startGame()">BAŞLAT</button>
+    <label class="field-label">👤 KULLANICI ADINIZI GİRİN</label>
+    <input class="text-input" type="text" id="nameInput" placeholder="İSMİNİZİ YAZIN..." autocomplete="off" maxlength="20">
 
-    <div class="leaderboard">
-      <div class="lb-title">🏆 KÜRESEL SIRALAMA (YEREL)</div>
-      <div id="leaderboardList"></div>
+    <label class="field-label">⚡ CİNSİYET SEÇİN</label>
+    <div class="gender-row">
+      <button class="gender-btn boy" id="btnBoy" onclick="selectGender('boy')">
+        <span class="icon">🧑</span>
+        ERKEK
+      </button>
+      <button class="gender-btn girl" id="btnGirl" onclick="selectGender('girl')">
+        <span class="icon">👩</span>
+        KIZ
+      </button>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <button class="start-btn" onclick="startGame()">OYUNA BAŞLA ▶</button>
+  </div>
+
+  <div class="card fade-in hidden" id="geniusScreen">
+    <div class="genius-screen">
+      <div class="genius-emoji">🧠</div>
+      <div style="display:inline-block">
+        <span class="crown-row">👑 👑 👑</span>
+      </div>
+      <div class="genius-title">SANA SORU SORMAYA GEREK YOK</div>
+      <div class="genius-name" id="geniusName"></div>
+      <div class="genius-msg" style="margin-top:20px">Zaten en zeki sensin!<br>Bu testler senin seviyeni ölçemez. 🚀</div>
+      <div style="font-size:3rem; margin:20px 0; animation:glow 2s infinite">⭐ 🏆 ⭐</div>
+      <button class="replay-btn" style="background:linear-gradient(135deg,var(--neon-gold),#ff8c00)" onclick="resetGame()">TEKRAR OYNA</button>
     </div>
   </div>
 
-  <div class="card hidden" id="gameScreen">
-    <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-family:'Orbitron'; font-size:0.9rem;">
-      <span id="playerDisplay" style="color:var(--neon-cyan)"></span>
-      <span id="scoreDisplay" style="color:var(--neon-gold)">000</span>
+  <div class="card fade-in hidden" id="gameScreen">
+    <div class="game-header">
+      <div class="player-info">
+        <div class="player-avatar" id="playerAvatar">🧑</div>
+        <div>
+          <div class="player-name-display" id="playerNameDisplay"></div>
+        </div>
+      </div>
+      <div class="score-area">
+        <div class="score-label">PUAN</div>
+        <div class="score-value" id="scoreDisplay">0</div>
+      </div>
     </div>
 
-    <div class="joker-bar">
-      <button class="joker-btn" id="joker50" onclick="useJoker()">🎭 %50 JOKER HAKKI</button>
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
     </div>
 
-    <div id="questionText" style="text-align:center; font-size:1.4rem; font-weight:700; min-height:100px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border-radius:15px; padding:20px; border:1px solid rgba(255,255,255,0.1);"></div>
+    <div style="display:flex; justify-content:center; align-items:center; margin-bottom:15px">
+      <div class="q-counter" id="qCounter">SORU 1 / 10</div>
+    </div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:25px;" id="optionsGrid"></div>
-    
-    <button class="start-btn" id="nextBtn" style="display:none; background:transparent; border:1px solid var(--neon-cyan); color:var(--neon-cyan);" onclick="nextQuestion()">SIRADAKİ SORU →</button>
+    <div class="timer-ring">
+      <svg width="60" height="60" viewBox="0 0 60 60">
+        <circle class="timer-circle" cx="30" cy="30" r="25"/>
+        <circle class="timer-progress" id="timerProgress" cx="30" cy="30" r="25"/>
+      </svg>
+      <div class="timer-text" id="timerText">20</div>
+    </div>
+
+    <div class="streak-banner" id="streakBanner"></div>
+
+    <div class="question-box">
+      <div class="question-text" id="questionText"></div>
+    </div>
+
+    <div class="options-grid" id="optionsGrid"></div>
+
+    <div class="feedback" id="feedbackText"></div>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">SONRAKI SORU →</button>
   </div>
 
-  <div class="card hidden" id="geniusScreen" style="text-align:center;">
-    <h1 style="font-family:'Orbitron'; color:var(--neon-gold); margin-bottom:20px;">SİSTEM HATASI: 999</h1>
-    <p style="font-size:1.2rem;">Senin zekan bu testi aştı. Soruları çözmene gerek yok.</p>
-    <div style="font-size:4rem; margin:30px;">👑</div>
-    <button class="start-btn" onclick="location.reload()">TEKRAR DENE</button>
-  </div>
-
-  <div class="card hidden" id="resultScreen" style="text-align:center;">
-    <h2 style="font-family:'Orbitron'; color:var(--neon-gold)">TAMAMLANDI</h2>
-    <div id="finalScore" style="font-size:5rem; font-weight:900; margin:20px 0;">0</div>
-    <p id="resultMsg" style="margin-bottom:30px; opacity:0.8;"></p>
-    <button class="start-btn" onclick="location.reload()">YENİDEN BAŞLA</button>
+  <div class="card fade-in hidden" id="resultScreen">
+    <div class="result-screen">
+      <div style="font-family:'Bebas Neue',cursive;font-size:0.8rem;letter-spacing:5px;color:rgba(255,255,255,0.3);margin-bottom:10px">SONUÇ</div>
+      <div class="result-score-big" id="resultScore">0</div>
+      <div class="result-of">PUAN TOPLADIN</div>
+      <div class="result-stars" id="resultStars">⭐⭐⭐</div>
+      <div class="result-msg" id="resultMsg"></div>
+      <button class="replay-btn" onclick="resetGame()">🔄 TEKRAR OYNA</button>
+    </div>
   </div>
 </div>
 
 <script>
-let gender='', playerName='', currentQ=0, score=0, jokerUsed=false, questions=[];
-const VIP_NAMES = ['sadık','oguz234','aras','ege'];
-
-// --- SORU HAVUZLARI ---
-const EASY = [
-  {q:"x + 5 = 12 ise x kaçtır?", opts:["5","6","7","8"], ans:2},
-  {q:"3x = 21 ise x kaçtır?", opts:["6","7","8","9"], ans:1},
-  {q:"10 tanesi 50 TL olan ürünün 3 tanesi?", opts:["15","20","25","30"], ans:0},
-  {q:"12/18 kesrinin en sade hali?", opts:["1/2","2/3","3/4","4/5"], ans:1},
-  {q:"x - 7 = 13 ise x kaçtır?", opts:["18","19","20","21"], ans:2},
-  {q:"2x + 4 = 10 ise x kaçtır?", opts:["2","3","4","5"], ans:1}
-];
-
-const HARD = [
-  {q:"2(x-3) = 3x - 10 ise x kaçtır?", opts:["3","4","5","6"], ans:1},
-  {q:"A:B=2:3 ve B:C=4:5 ise A:C oranı?", opts:["8:15","2:5","3:5","4:15"], ans:0},
-  {q:"%20 kârla 120 TL olan bir malın maliyeti?", opts:["90","100","110","115"], ans:1},
-  {q:"(x+1)/2 = (x-2)/3 ise x kaçtır?", opts:["-7","-5","5","7"], ans:0},
-  {q:"4 işçinin 6 günde yaptığı işi 3 işçi?", opts:["8","9","10","12"], ans:0}
-];
-
-// --- INITIALIZE PARTICLES ---
-function initParticles(){
-  const c = document.getElementById('particles');
-  for(let i=0; i<30; i++){
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random()*100+'%';
-    p.style.setProperty('--dx', (Math.random()-0.5)*200+'px');
-    p.style.animationDuration = (5+Math.random()*10)+'s';
-    p.style.animationDelay = Math.random()*5+'s';
+// ── PARTICLES ──
+function makeParticles(){
+  const c=document.getElementById('particles');
+  for(let i=0;i<30;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.setProperty('--dx',(Math.random()-0.5)*200+'px');
+    p.style.animationDuration=(5+Math.random()*10)+'s';
+    p.style.animationDelay=(Math.random()*10)+'s';
+    p.style.opacity=Math.random()*0.5;
+    if(Math.random()>0.7) p.style.background='#ff006e';
+    if(Math.random()>0.85) p.style.background='#ffd700';
     c.appendChild(p);
   }
 }
-initParticles();
+makeParticles();
+
+// ── STATE ──
+let gender='', playerName='', difficulty='easy';
+let currentQ=0, score=0, streak=0;
+let timerInterval=null, timeLeft=20;
+let questions=[];
+
+const VIP_NAMES = ['sadık','sadik','oguz234','aras','ege'];
+
+const EASY_QUESTIONS = [
+  {q:"Bir sınıfta 12 kız, 18 erkek öğrenci var. Kız/Erkek oranı nedir?",opts:["2/3","1/2","3/4","2/5"],ans:0},
+  {q:"x + 5 = 12 denkleminde x kaçtır?",opts:["5","6","7","8"],ans:2},
+  {q:"3/4 = x/12 oranında x kaçtır?",opts:["6","7","8","9"],ans:3},
+  {q:"2x - 4 = 10 denkleminde x kaçtır?",opts:["5","6","7","8"],ans:2},
+  {q:"Bir araç 3 saatte 180 km yol alıyor. 5 saatte kaç km alır?",opts:["250","280","300","320"],ans:2},
+  {q:"4/x = 2/5 oranında x kaçtır?",opts:["8","9","10","12"],ans:2},
+  {q:"3x = 21 denkleminde x kaçtır?",opts:["5","6","7","8"],ans:2},
+  {q:"Bir çeşme 4 dakikada 20 litre su akıtıyor. 10 dakikada kaç litre akıtır?",opts:["40","45","50","55"],ans:2},
+  {q:"x/3 = 4 denkleminde x kaçtır?",opts:["9","10","11","12"],ans:3},
+  {q:"5 şeker 25 TL ise 8 şeker kaç TL'dir?",opts:["35","40","45","50"],ans:1},
+  {q:"Oran 2:3 olan iki sayının toplamı 25 ise küçük sayı kaçtır?",opts:["8","9","10","11"],ans:2},
+  {q:"2x + 3 = 15 denkleminde x kaçtır?",opts:["4","5","6","7"],ans:2},
+  {q:"3/5 = 12/x oranında x kaçtır?",opts:["16","18","20","22"],ans:2},
+  {q:"Bir ürün %20 indirimle 80 TL oldu. İndirim öncesi kaç TL idi?",opts:["90","95","100","105"],ans:2},
+  {q:"x - 7 = 13 denkleminde x kaçtır?",opts:["18","19","20","21"],ans:2},
+];
+
+const HARD_QUESTIONS = [
+  {q:"Bir tankın 2/3'ü 160 litre ise 5/4'ü kaç litredir?",opts:["280","295","300","310"],ans:2},
+  {q:"2x² - 8 = 10 denkleminde x'in pozitif değeri kaçtır?",opts:["2","3","4","5"],ans:1},
+  {q:"A:B = 3:5 ve B:C = 2:7 ise A:C oranı nedir?",opts:["6:35","5:21","3:17","6:25"],ans:0},
+  {q:"(x+3)/(x-2) = 4 denkleminde x kaçtır?",opts:["9","10","11","12"],ans:2},
+  {q:"Bir boru havuzu 6 saatte, diğeri 12 saatte doldurursa birlikte kaç saatte?",opts:["3","4","5","6"],ans:1},
+  {q:"İki sayının oranı 5:7, farkı 18'dir. Büyük sayı kaçtır?",opts:["55","60","63","70"],ans:2},
+  {q:"3x - 2y = 12 ve x + y = 7 denklem sisteminde x kaçtır?",opts:["3","4","5","6"],ans:2},
+  {q:"Doğru orantılı a ve b için a=12, b=9 iken a=20 için b kaçtır?",opts:["13","14","15","16"],ans:2},
+  {q:"x²-5x+6=0 denkleminin kökleri toplamı kaçtır?",opts:["3","4","5","6"],ans:2},
+  {q:"5 işçi 8 günde bitiriyor. 4 işçi kaç günde bitirir? (Ters orantı)",opts:["8","9","10","11"],ans:2},
+  {q:"(2x+1)/3 - (x-2)/4 = 5 denkleminde x kaçtır?",opts:["7","8","9","10"],ans:0},
+  {q:"Üç sayı 2:3:5 oranındadır. En büyüğü 75 ise en küçüğü kaçtır?",opts:["25","28","30","35"],ans:2},
+  {q:"Karma oran: 4 saatçi 6 günde 120 saat çalışıyor. 5 saatçi 8 günde kaç saat?",opts:["180","190","200","210"],ans:2},
+  {q:"3(x-4) = 2(x+1) denkleminde x kaçtır?",opts:["12","13","14","15"],ans:2},
+  {q:"|2x - 5| = 7 denkleminin pozitif kökü kaçtır?",opts:["5","6","7","8"],ans:1},
+];
+
+const ULTRA_QUESTIONS = [
+  {q:"999 kodu girildi. ULTRA BOSS: (x+1)/(x-1) - (x-1)/(x+1) = 3/2 denkleminin en büyük kökü?",opts:["3","5","7","9"],ans:1},
+  {q:"BOSS LEVEL: a:b:c = 2:3:5, toplam 150. a × c - b² = ?",opts:["800","875","900","950"],ans:1},
+  {q:"İmkansız Soru: 3 boru birlikte 4 saatte doldurur. 1. boru 12 saatte, 2. boru 18 saatte. 3. boru tek başına?",opts:["8","9","10","12"],ans:1},
+  {q:"ULTRA: Ters orantı: (a²-4)/(a+2) = 3 ise a'nın tüm değerleri toplamı?",opts:["5","6","7","8"],ans:0},
+  {q:"GODMODE: x/3 + 2x/5 - x/15 = 14 denkleminde x kaçtır?",opts:["25","28","30","35"],ans:2},
+  {q:"NEMESIS: İki sayı oranı 7:9, ort orantılı (geometric mean) 63'tür. Büyük sayı?",opts:["81","84","87","90"],ans:0},
+  {q:"ULTRA BOSS: 3x - 4y = -2 ve 5x + 2y = 24 sisteminde x + y = ?",opts:["6","7","8","9"],ans:2},
+  {q:"CHAOS: Bir sayının %40'ının %60'ı, o sayının %x'ine eşitse x kaçtır?",opts:["20","22","24","26"],ans:2},
+  {q:"FINAL BOSS: a/b = 5/3 ve a-b = 8 ise ab = ?",opts:["55","60","65","70"],ans:1},
+  {q:"ULTRA ENDGAME: |(x-3)(x+2)| ≤ 0 denkleminin çözüm kümesi kaç eleman?",opts:["1","2","3","4"],ans:1},
+];
 
 function selectGender(g){
-  gender = g;
-  document.getElementById('btnBoy').classList.toggle('selected', g==='boy');
-  document.getElementById('btnGirl').classList.toggle('selected', g==='girl');
+  gender=g;
+  document.getElementById('btnBoy').classList.toggle('selected',g==='boy');
+  document.getElementById('btnGirl').classList.toggle('selected',g==='girl');
+  document.getElementById('errorMsg').textContent='';
 }
 
 function startGame(){
-  playerName = document.getElementById('nameInput').value.trim();
-  if(!playerName || !gender) { alert("Erişim Reddedildi: Bilgileri eksiksiz girin."); return; }
+  const name=document.getElementById('nameInput').value.trim();
+  if(!name){ showError('İsminizi girin!'); return; }
+  if(!gender){ showError('Cinsiyet seçin!'); return; }
+  
+  // Müziği Başlat (Tarayıcı politikaları gereği kullanıcı etkileşimiyle başlar)
+  const music = document.getElementById('bgMusic');
+  music.play().catch(e => console.log("Müzik otomatik başlatılamadı, ancak oyun başladı."));
 
-  // MÜZİK
-  const m = document.getElementById('bgMusic');
-  m.volume = 0.4; m.play().catch(()=>console.log("Etkileşim gerekiyor."));
-
-  // GİZLİ SİSTEMLER (Zorluk & VIP)
-  if(VIP_NAMES.includes(playerName.toLowerCase()) || playerName === '999'){
-    switchScreen('geniusScreen');
+  playerName=name;
+  if(VIP_NAMES.includes(name.toLowerCase())){
+    showGeniusScreen(name);
     return;
   }
-
-  questions = gender === 'boy' ? shuffle([...EASY]) : shuffle([...HARD]);
-  document.getElementById('playerDisplay').textContent = playerName.toUpperCase();
+  if(name==='999'){
+    difficulty='ultra';
+    questions=shuffle([...ULTRA_QUESTIONS]).slice(0,10);
+  } else {
+    if(gender==='boy'){
+      difficulty='easy';
+      questions=shuffle([...EASY_QUESTIONS]).slice(0,10);
+    } else {
+      difficulty='hard';
+      questions=shuffle([...HARD_QUESTIONS]).slice(0,10);
+    }
+  }
+  currentQ=0; score=0; streak=0;
+  setupGameScreen();
   switchScreen('gameScreen');
   loadQuestion();
 }
 
+function showError(msg){
+  const el=document.getElementById('errorMsg');
+  el.textContent=msg;
+  el.style.animation='none';
+  el.offsetHeight;
+  el.style.animation='fadeIn 0.3s';
+  document.querySelector('.card').classList.add('shake');
+  setTimeout(()=>document.querySelector('.card').classList.remove('shake'),400);
+}
+
+function showGeniusScreen(name){
+  document.getElementById('geniusName').textContent=name.toUpperCase();
+  switchScreen('geniusScreen');
+}
+
+function setupGameScreen(){
+  document.getElementById('playerAvatar').textContent=playerName==='999'?'💀':(gender==='boy'?'🧑':'👩');
+  document.getElementById('playerNameDisplay').textContent=playerName.toUpperCase();
+}
+
 function loadQuestion(){
-  if(currentQ >= questions.length){ endGame(); return; }
-  const q = questions[currentQ];
-  document.getElementById('questionText').textContent = q.q;
-  document.getElementById('nextBtn').style.display = 'none';
-  document.getElementById('joker50').disabled = jokerUsed;
-  
-  const grid = document.getElementById('optionsGrid');
-  grid.innerHTML = '';
-  q.opts.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn fade-in';
-    btn.textContent = opt;
-    btn.onclick = () => checkAnswer(i, btn);
+  if(currentQ>=questions.length){ endGame(); return; }
+  const q=questions[currentQ];
+  const total=questions.length;
+
+  document.getElementById('qCounter').textContent=`SORU ${currentQ+1} / ${total}`;
+  document.getElementById('progressFill').style.width=((currentQ/total)*100)+'%';
+  document.getElementById('questionText').innerHTML=q.q.replace(/(BOSS|ULTRA|CHAOS|FINAL|GODMODE|NEMESIS)/g,'<span class="highlight">$1</span>');
+  document.getElementById('feedbackText').textContent='';
+  document.getElementById('feedbackText').className='feedback';
+  document.getElementById('nextBtn').style.display='none';
+
+  const grid=document.getElementById('optionsGrid');
+  grid.innerHTML='';
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option-btn fade-in';
+    btn.textContent=opt;
+    btn.style.animationDelay=(i*0.07)+'s';
+    btn.onclick=()=>answer(i,btn);
     grid.appendChild(btn);
   });
+  startTimer();
 }
 
-function useJoker(){
-  if(jokerUsed) return;
-  const q = questions[currentQ];
-  const btns = document.querySelectorAll('.option-btn');
-  let count = 0;
-  let indices = [0,1,2,3].filter(i => i !== q.ans);
-  shuffle(indices).slice(0, 2).forEach(idx => btns[idx].classList.add('hidden-opt'));
-  jokerUsed = true;
-  document.getElementById('joker50').disabled = true;
+function startTimer(){
+  clearInterval(timerInterval);
+  const limit=difficulty==='easy'?20:difficulty==='hard'?15:10;
+  timeLeft=limit;
+  const prog=document.getElementById('timerProgress');
+  const txt=document.getElementById('timerText');
+  const perim=157;
+  prog.style.stroke=getComputedStyle(document.documentElement).getPropertyValue('--neon-cyan');
+
+  function tick(){
+    txt.textContent=timeLeft;
+    prog.style.strokeDashoffset=perim*(1-timeLeft/limit);
+    const pct=timeLeft/limit;
+    if(pct<0.3) prog.style.stroke='#ff3232';
+    else if(pct<0.6) prog.style.stroke='#ffd700';
+    else prog.style.stroke='#00f5ff';
+
+    if(timeLeft<=0){
+      clearInterval(timerInterval);
+      timeExpired();
+    } else { timeLeft--; }
+  }
+  tick();
+  timerInterval=setInterval(tick,1000);
 }
 
-function checkAnswer(idx, btn){
-  const q = questions[currentQ];
-  const btns = document.querySelectorAll('.option-btn');
-  btns.forEach(b => b.disabled = true);
-  
-  if(idx === q.ans){
+function timeExpired(){
+  disableOptions();
+  const q=questions[currentQ];
+  const btns=document.querySelectorAll('.option-btn');
+  btns[q.ans].classList.add('correct');
+  streak=0;
+  document.getElementById('feedbackText').textContent='⏰ SÜRE DOLDU!';
+  document.getElementById('feedbackText').className='feedback wrong-fb';
+  document.getElementById('nextBtn').style.display='block';
+  document.getElementById('streakBanner').textContent='';
+}
+
+function answer(idx, btn){
+  clearInterval(timerInterval);
+  const q=questions[currentQ];
+  disableOptions();
+
+  if(idx===q.ans){
     btn.classList.add('correct');
-    score += (gender === 'boy' ? 20 : 50); // Zor modda daha çok puan
+    const bonus=Math.max(1,timeLeft);
+    score+=10+bonus;
+    streak++;
+    document.getElementById('scoreDisplay').textContent=score;
+    document.getElementById('feedbackText').textContent=getFeedback(true);
+    document.getElementById('feedbackText').className='feedback correct-fb';
+    if(streak>=3){
+      document.getElementById('streakBanner').textContent=`🔥 ${streak} SERI DOĞRU!`;
+    }
   } else {
     btn.classList.add('wrong');
-    btns[q.ans].classList.add('correct');
+    document.querySelectorAll('.option-btn')[q.ans].classList.add('correct');
+    streak=0;
+    document.getElementById('feedbackText').textContent=getFeedback(false);
+    document.getElementById('feedbackText').className='feedback wrong-fb';
+    document.getElementById('streakBanner').textContent='';
   }
-  document.getElementById('scoreDisplay').textContent = score;
-  document.getElementById('nextBtn').style.display = 'block';
+  document.getElementById('nextBtn').style.display='block';
 }
 
-function nextQuestion(){ currentQ++; loadQuestion(); }
+function getFeedback(correct){
+  const pos=['💥 MÜKEMMEL!','⚡ SÜPER!','🎯 TAM İSABET!','🔥 HARIKA!','✨ BRAVO!'];
+  const neg=['❌ YANLIŞ!','💀 OLMADI!','⚠ BİR DAHA DÜŞ!','🤔 EEEHHh..!','😬 NOPE!'];
+  const arr=correct?pos:neg;
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function disableOptions(){
+  document.querySelectorAll('.option-btn').forEach(b=>b.disabled=true);
+}
+
+function nextQuestion(){
+  currentQ++;
+  loadQuestion();
+}
 
 function endGame(){
-  saveScore(playerName, score);
-  document.getElementById('finalScore').textContent = score;
-  document.getElementById('resultMsg').textContent = `${playerName}, performansın kaydedildi.`;
+  clearInterval(timerInterval);
+  document.getElementById('resultScore').textContent=score;
+  let stars='⭐⭐⭐', msg='';
+  const pct = score / 200; 
+  if(pct>=0.8){ stars='🌟🌟🌟'; msg=`Mükemmel! ${playerName}, sen bir matematik dehası! 🧠`; }
+  else if(pct>=0.5){ stars='⭐⭐'; msg=`İyi iş ${playerName}! Biraz daha çalışırsan zirvedesin! 💪`; }
+  else { stars='⭐'; msg=`Yılma ${playerName}! Her büyük matematikçi bir yerden başladı! 🚀`; }
+  document.getElementById('resultStars').textContent=stars;
+  document.getElementById('resultMsg').textContent=msg;
   switchScreen('resultScreen');
 }
 
-// LEADERBOARD (Local Storage - GitHub Pages için en iyi çözüm)
-function saveScore(n, s){
-  let list = JSON.parse(localStorage.getItem('mz_scores') || '[]');
-  list.push({n, s});
-  list.sort((a,b) => b.s - a.s);
-  localStorage.setItem('mz_scores', JSON.stringify(list.slice(0, 5)));
-  updateLB();
-}
-
-function updateLB(){
-  const list = JSON.parse(localStorage.getItem('mz_scores') || '[]');
-  const div = document.getElementById('leaderboardList');
-  div.innerHTML = list.map((x,i) => `<div class="lb-row"><span>#${i+1} ${x.n}</span><span>${x.s} PT</span></div>`).join('');
-}
-
 function switchScreen(id){
-  ['setupScreen','gameScreen','resultScreen','geniusScreen'].forEach(s => document.getElementById(s).classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+  ['setupScreen','geniusScreen','gameScreen','resultScreen'].forEach(s=>{
+    const el=document.getElementById(s);
+    el.classList.add('hidden'); el.classList.remove('fade-in');
+  });
+  const target=document.getElementById(id);
+  target.classList.remove('hidden');
+  void target.offsetWidth;
+  target.classList.add('fade-in');
 }
 
-function shuffle(a){ return a.sort(() => Math.random() - 0.5); }
+function resetGame(){
+  gender=''; playerName=''; difficulty='easy';
+  document.getElementById('nameInput').value='';
+  document.getElementById('btnBoy').classList.remove('selected');
+  document.getElementById('btnGirl').classList.remove('selected');
+  document.getElementById('errorMsg').textContent='';
+  document.getElementById('scoreDisplay').textContent='0';
+  switchScreen('setupScreen');
+}
 
-updateLB(); // Başlangıçta listeyi yükle
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
 </script>
 </body>
 </html>
