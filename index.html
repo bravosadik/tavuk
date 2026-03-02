@@ -3,107 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MathZone 7 | Joker Edition</title>
+<title>MathZone 7 | Pro Leaderboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --neon-cyan: #00f5ff;
-    --neon-pink: #ff006e;
-    --neon-gold: #ffd700;
-    --neon-green: #39ff14;
-    --dark-bg: #050510;
-    --card-bg: rgba(10,10,40,0.95);
-    --border-glow: rgba(0,245,255,0.4);
+    --neon-cyan: #00f5ff; --neon-pink: #ff006e; --neon-gold: #ffd700; --neon-green: #39ff14;
+    --dark-bg: #050510; --card-bg: rgba(10,10,40,0.95); --border-glow: rgba(0,245,255,0.4);
   }
-
   * { margin:0; padding:0; box-sizing:border-box; }
-
-  body {
-    font-family: 'Rajdhani', sans-serif;
-    background: var(--dark-bg);
-    min-height: 100vh;
-    overflow-x: hidden;
-    color: #fff;
-  }
-
-  /* ── ANIMATED BACKGROUND ── */
-  .bg-grid {
-    position: fixed; inset:0; z-index:0;
-    background-image:
-      linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    animation: gridMove 20s linear infinite;
-  }
-  @keyframes gridMove { from{background-position:0 0} to{background-position:40px 40px} }
-
-  .bg-orb { position: fixed; border-radius:50%; filter:blur(80px); z-index:0; pointer-events:none; }
-  .orb1 { width:400px; height:400px; background:rgba(0,245,255,0.08); top:-100px; left:-100px; }
-  .orb2 { width:300px; height:300px; background:rgba(255,0,110,0.08); bottom:-50px; right:-50px; }
-
-  /* ── LAYOUT ── */
-  .container {
-    position: relative; z-index:10;
-    max-width: 700px; margin:0 auto;
-    padding: 20px; min-height: 100vh;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-  }
-
-  .logo {
-    font-family: 'Orbitron', sans-serif;
-    font-size: clamp(2rem, 8vw, 3.5rem);
-    text-align: center; margin-bottom: 8px;
-    background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink), var(--neon-gold));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-
-  .card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-glow);
-    border-radius: 20px; padding: 40px; width: 100%;
-    box-shadow: 0 0 40px rgba(0,245,255,0.1);
-    backdrop-filter: blur(20px); position: relative;
-  }
-
-  /* ── JOKER STYLE ── */
-  .joker-container {
-    display: flex; justify-content: center; gap: 20px; margin-bottom: 15px;
-  }
-  .joker-btn {
-    background: rgba(255, 215, 0, 0.1);
-    border: 1px solid var(--neon-gold);
-    color: var(--neon-gold);
-    padding: 8px 15px; border-radius: 30px;
-    font-family: 'Orbitron', sans-serif; font-size: 0.8rem;
-    cursor: pointer; transition: all 0.3s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .joker-btn:hover:not(:disabled) {
-    background: var(--neon-gold); color: #000;
-    box-shadow: 0 0 15px var(--neon-gold);
-  }
-  .joker-btn:disabled {
-    opacity: 0.3; cursor: not-allowed; filter: grayscale(1);
-  }
-
-  /* ── ESKİ STİLLERİN DEVAMI (Özetlendi) ── */
-  .field-label { display:block; font-family:'Bebas Neue', cursive; letter-spacing:4px; color:var(--neon-cyan); margin: 15px 0 5px; }
-  .text-input { width:100%; padding:14px; background:rgba(0,245,255,0.05); border: 1px solid rgba(0,245,255,0.3); border-radius:10px; color:#fff; font-size:1.2rem; outline:none; }
-  .gender-row { display:flex; gap:15px; margin-top:8px; }
-  .gender-btn { flex:1; padding:15px; border:2px solid rgba(255,255,255,0.1); border-radius:14px; background:rgba(255,255,255,0.03); cursor:pointer; color:#fff; font-family:'Bebas Neue',cursive; font-size:1.1rem; }
-  .gender-btn.selected { border-color:var(--neon-cyan); background:rgba(0,245,255,0.1); }
-  .start-btn { width:100%; margin-top:30px; padding:18px; background: var(--neon-cyan); border:none; border-radius:12px; font-family:'Orbitron',sans-serif; font-weight:700; cursor:pointer; }
+  body { font-family: 'Rajdhani', sans-serif; background: var(--dark-bg); min-height: 100vh; color: #fff; overflow-x: hidden; }
   
-  .game-header { display:flex; justify-content:space-between; margin-bottom:20px; }
-  .score-value { font-family:'Orbitron',sans-serif; font-size:1.5rem; color:var(--neon-gold); }
-  .question-box { background:rgba(255,255,255,0.05); padding:20px; border-radius:15px; text-align:center; margin-bottom:20px; min-height: 100px; display: flex; align-items: center; justify-content: center; }
-  .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .option-btn { padding:15px; border:1px solid rgba(255,255,255,0.2); border-radius:10px; background:rgba(255,255,255,0.05); color:#fff; cursor:pointer; font-family:'Rajdhani'; font-weight:600; }
-  .option-btn.correct { background: var(--neon-green) !important; color: #000; }
+  /* Arkaplan ve Animasyonlar */
+  .bg-grid { position: fixed; inset:0; z-index:0; background-image: linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px); background-size: 40px 40px; }
+  .container { position: relative; z-index:10; max-width: 700px; margin:0 auto; padding: 20px; min-height: 100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .logo { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 8vw, 3rem); text-align: center; margin-bottom: 20px; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  
+  .card { background: var(--card-bg); border: 1px solid var(--border-glow); border-radius: 20px; padding: 30px; width: 100%; box-shadow: 0 0 30px rgba(0,245,255,0.1); backdrop-filter: blur(15px); }
+  
+  /* Form ve Butonlar */
+  .field-label { display:block; font-family:'Bebas Neue'; letter-spacing:2px; color:var(--neon-cyan); margin: 15px 0 5px; }
+  .text-input { width:100%; padding:12px; background:rgba(255,255,255,0.05); border: 1px solid var(--border-glow); border-radius:8px; color:#fff; font-size:1.1rem; outline:none; }
+  .gender-row { display:flex; gap:10px; margin-top:10px; }
+  .gender-btn { flex:1; padding:12px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; background:rgba(255,255,255,0.05); color:#fff; cursor:pointer; font-family:'Bebas Neue'; }
+  .gender-btn.selected { border-color:var(--neon-cyan); background:rgba(0,245,255,0.2); box-shadow: 0 0 15px var(--neon-cyan); }
+  .start-btn { width:100%; margin-top:20px; padding:15px; background: var(--neon-cyan); border:none; border-radius:10px; font-family:'Orbitron'; font-weight:700; cursor:pointer; color:#000; transition: 0.3s; }
+  .start-btn:hover { box-shadow: 0 0 20px var(--neon-cyan); }
+
+  /* Leaderboard Style */
+  .leaderboard { margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); width: 100%; }
+  .lb-title { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--neon-gold); text-align: center; margin-bottom: 10px; }
+  .lb-item { display: flex; justify-content: space-between; padding: 5px 10px; background: rgba(255,255,255,0.03); margin-bottom: 4px; border-radius: 5px; font-size: 0.9rem; }
+  .lb-rank { color: var(--neon-cyan); font-weight: bold; }
+
+  /* Oyun İçi */
+  .joker-btn { background: rgba(255,215,0,0.1); border: 1px solid var(--neon-gold); color: var(--neon-gold); padding: 5px 15px; border-radius: 20px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; margin-bottom: 15px; }
+  .joker-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top: 15px; }
+  .option-btn { padding:15px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; background:rgba(255,255,255,0.05); color:#fff; cursor:pointer; font-weight: 600; transition: 0.2s; }
+  .option-btn.correct { background: var(--neon-green) !important; color:#000; }
   .option-btn.wrong { background: var(--neon-pink) !important; }
-  .option-btn.hidden-opt { visibility: hidden; pointer-events: none; }
+  .hidden-opt { visibility: hidden; }
+  .next-btn { width:100%; margin-top:15px; padding:12px; background:transparent; border:1px solid var(--neon-cyan); color:var(--neon-cyan); border-radius:8px; display:none; cursor:pointer; }
   
-  .next-btn { width:100%; margin-top:15px; padding:12px; background:transparent; border:1px solid var(--neon-cyan); color:var(--neon-cyan); border-radius:8px; cursor:pointer; display:none; font-family:'Bebas Neue'; letter-spacing:2px; }
   .hidden { display: none !important; }
   .fade-in { animation: fadeIn 0.4s ease; }
   @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
@@ -118,168 +59,180 @@
   <div class="logo">MATHZONE 7</div>
 
   <div class="card fade-in" id="setupScreen">
-    <label class="field-label">İSMİNİZ</label>
-    <input class="text-input" type="text" id="nameInput" placeholder="Buraya yazın...">
-    <label class="field-label">CİNSİYET</label>
+    <label class="field-label">KULLANICI ADI</label>
+    <input class="text-input" type="text" id="nameInput" placeholder="İsminizi yazın...">
+    
+    <label class="field-label">CİNSİYET (ZORLUK SEÇİMİ)</label>
     <div class="gender-row">
-      <button class="gender-btn" id="btnBoy" onclick="selectGender('boy')">ERKEK</button>
-      <button class="gender-btn" id="btnGirl" onclick="selectGender('girl')">KIZ</button>
+      <button class="gender-btn" id="btnBoy" onclick="selectGender('boy')">ERKEK (KOLAY)</button>
+      <button class="gender-btn" id="btnGirl" onclick="selectGender('girl')">KIZ (ZOR)</button>
     </div>
-    <button class="start-btn" onclick="startGame()">OYUNA BAŞLA</button>
+    
+    <button class="start-btn" onclick="startGame()">SİSTEME GİRİŞ YAP</button>
+
+    <div class="leaderboard">
+      <div class="lb-title">🏆 TOP 5 SKOR (YEREL)</div>
+      <div id="lbContent"></div>
+    </div>
   </div>
 
   <div class="card hidden" id="gameScreen">
-    <div class="game-header">
-      <div id="playerNameDisplay" style="font-family:'Bebas Neue'; letter-spacing:2px; color:var(--neon-cyan)"></div>
-      <div class="score-value" id="scoreDisplay">0</div>
+    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+        <span id="displayPlayer" style="color:var(--neon-cyan); font-family:'Bebas Neue'"></span>
+        <span id="displayScore" style="color:var(--neon-gold); font-family:'Orbitron'">0</span>
     </div>
-
-    <div class="joker-container">
-      <button class="joker-btn" id="fiftyFiftyBtn" onclick="useFiftyFifty()">
-        <span>🎭</span> %50 JOKER
-      </button>
-    </div>
-
-    <div class="question-box">
-      <div id="questionText" style="font-size:1.2rem; font-weight:600"></div>
-    </div>
-
+    
+    <button class="joker-btn" id="jokerBtn" onclick="useJoker()">🎭 %50 JOKER HAKKI</button>
+    
+    <div id="questionText" style="text-align:center; font-size:1.1rem; margin-bottom:20px; min-height:60px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border-radius:10px; padding:10px;"></div>
+    
     <div class="options-grid" id="optionsGrid"></div>
-    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">SIRADAKİ SORU</button>
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">SIRADAKİ VERİ →</button>
   </div>
 
   <div class="card hidden" id="resultScreen">
     <div style="text-align:center">
-      <h2 style="font-family:'Orbitron'; color:var(--neon-gold)">OYUN BİTTİ</h2>
-      <div id="resultScore" style="font-size:4rem; margin:20px 0">0</div>
+      <h2 style="font-family:'Orbitron'; color:var(--neon-gold)">GÖREV TAMAMLANDI</h2>
+      <div id="finalScore" style="font-size:3.5rem; margin:15px 0">0</div>
       <p id="resultMsg" style="margin-bottom:20px"></p>
-      <button class="start-btn" onclick="location.reload()">TEKRAR DENE</button>
+      <button class="start-btn" onclick="location.reload()">TEKRAR BAŞLAT</button>
     </div>
   </div>
 </div>
 
 <script>
-let gender='', playerName='', currentQ=0, score=0;
-let questions=[];
-let jokerUsed = false; // Joker kullanıldı mı kontrolü
+let gender='', playerName='', currentQ=0, score=0, jokerUsed=false, questions=[];
 
-const QUESTIONS = [
-  {q:"x + 5 = 12 ise x kaçtır?", opts:["5","6","7","8"], ans:2},
-  {q:"12 kız, 18 erkek olan sınıfta Kız/Erkek oranı?", opts:["2/3","1/2","3/4","2/5"], ans:0},
-  {q:"3x = 21 ise x kaçtır?", opts:["5","6","7","8"], ans:2},
-  {q:"4/x = 2/5 ise x kaçtır?", opts:["8","9","10","12"], ans:2},
-  {q:"2x - 4 = 10 ise x kaçtır?", opts:["5","6","7","8"], ans:2},
-  {q:"5 kalem 25 TL ise 8 kalem kaç TL?", opts:["35","40","45","50"], ans:1},
-  {q:"x/3 = 4 ise x kaçtır?", opts:["9","10","11","12"], ans:3},
-  {q:"3/5 = 12/x ise x kaçtır?", opts:["16","18","20","22"], ans:2},
-  {q:"2x + 3 = 15 ise x kaçtır?", opts:["4","5","6","7"], ans:2},
-  {q:"Bir araç 3 saatte 180km giderse, 5 saatte?", opts:["250","280","300","320"], ans:2}
+// Orijinal Sorular
+const EASY = [
+    {q:"x + 8 = 15 ise x?", opts:["5","6","7","8"], ans:2},
+    {q:"10 kg elma 50 TL ise 3 kg?", opts:["15","20","25","30"], ans:0},
+    {q:"3x = 27 ise x?", opts:["7","8","9","10"], ans:2},
+    {q:"12 kız, 12 erkek oranı?", opts:["1/1","1/2","2/3","3/4"], ans:0},
+    {q:"x/2 = 10 ise x?", opts:["5","10","15","20"], ans:3}
+];
+const HARD = [
+    {q:"2x - 5 = 3x - 10 ise x?", opts:["3","4","5","6"], ans:2},
+    {q:"A:B = 2:3 ve B:C = 4:5 ise A:C?", opts:["8:15","1:2","3:5","2:5"], ans:0},
+    {q:"%20 indirimle 80 TL olan ürün?", opts:["90","100","110","120"], ans:1},
+    {q:"4 işçi 6 günde yaparsa, 3 işçi?", opts:["8","9","10","12"], ans:0},
+    {q:"(x+2)/3 = (x-1)/2 ise x?", opts:["5","6","7","8"], ans:2}
+];
+const ULTRA = [
+    {q:"BOSS: 2(x-3) + 3(x+1) = 22?", opts:["3","4","5","6"], ans:2},
+    {q:"ULTRA: x/2 + x/3 = 10?", opts:["10","11","12","13"], ans:2}
 ];
 
 function selectGender(g){
   gender=g;
-  document.getElementById('btnBoy').classList.toggle('selected',g==='boy');
-  document.getElementById('btnGirl').classList.toggle('selected',g==='girl');
+  document.getElementById('btnBoy').classList.toggle('selected', g==='boy');
+  document.getElementById('btnGirl').classList.toggle('selected', g==='girl');
 }
 
 function startGame(){
-  playerName = document.getElementById('nameInput').value;
-  if(!playerName || !gender) { alert("Lütfen isim ve cinsiyet seçin!"); return; }
+  playerName = document.getElementById('nameInput').value.trim();
+  if(!playerName || !gender) { alert("Kimlik ve Cinsiyet doğrulanmadı!"); return; }
   
-  // Müzik Başlat
-  const music = document.getElementById('bgMusic');
-  music.volume = 0.4;
-  music.play().catch(e => console.log("Müzik yüklenemedi."));
+  // Müzik
+  const m = document.getElementById('bgMusic');
+  m.volume = 0.4; m.play().catch(e=>console.log("Müzik aktif değil."));
 
-  questions = shuffle([...QUESTIONS]);
-  document.getElementById('playerNameDisplay').textContent = playerName.toUpperCase();
+  // Gizli Zorluk ve Seçim Sistemi
+  if(playerName === '999'){
+    questions = shuffle([...ULTRA, ...HARD]);
+  } else {
+    questions = gender === 'boy' ? shuffle([...EASY]) : shuffle([...HARD]);
+  }
+
+  document.getElementById('displayPlayer').textContent = playerName.toUpperCase();
   switchScreen('gameScreen');
+  updateLeaderboardDisplay();
   loadQuestion();
 }
 
 function loadQuestion(){
   if(currentQ >= questions.length){ endGame(); return; }
-  
   const q = questions[currentQ];
   document.getElementById('questionText').textContent = q.q;
   document.getElementById('nextBtn').style.display = 'none';
-  
   const grid = document.getElementById('optionsGrid');
   grid.innerHTML = '';
-  
   q.opts.forEach((opt, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'option-btn fade-in';
-    btn.textContent = opt;
-    btn.onclick = () => checkAnswer(i, btn);
-    grid.appendChild(btn);
+    const b = document.createElement('button');
+    b.className = 'option-btn fade-in';
+    b.textContent = opt;
+    b.onclick = () => check(i, b);
+    grid.appendChild(b);
   });
-
-  // Eğer joker kullanılmışsa buton pasif kalsın
-  document.getElementById('fiftyFiftyBtn').disabled = jokerUsed;
+  document.getElementById('jokerBtn').disabled = jokerUsed;
 }
 
-// 🎭 JOKER FONKSİYONU
-function useFiftyFifty() {
+function useJoker(){
   if(jokerUsed) return;
-  
   const q = questions[currentQ];
-  const correctIdx = q.ans;
-  let buttons = document.querySelectorAll('.option-btn');
-  let removedCount = 0;
-  
-  // Yanlış şıklardan rastgele iki tanesini gizle
-  let indices = [0, 1, 2, 3].filter(i => i !== correctIdx);
-  shuffle(indices); // Yanlışları karıştır
-  
-  indices.slice(0, 2).forEach(idx => {
-    buttons[idx].classList.add('hidden-opt');
+  const btns = document.querySelectorAll('.option-btn');
+  let hidden = 0;
+  btns.forEach((b, i) => {
+    if(i !== q.ans && hidden < 2){
+      b.classList.add('hidden-opt');
+      hidden++;
+    }
   });
-
   jokerUsed = true;
-  document.getElementById('fiftyFiftyBtn').disabled = true;
-  document.getElementById('fiftyFiftyBtn').textContent = "JOKER KULLANILDI";
+  document.getElementById('jokerBtn').disabled = true;
 }
 
-function checkAnswer(idx, btn){
+function check(idx, btn){
   const q = questions[currentQ];
-  const allBtns = document.querySelectorAll('.option-btn');
-  
-  allBtns.forEach(b => b.disabled = true);
-  
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
   if(idx === q.ans){
     btn.classList.add('correct');
-    score += 20;
-    document.getElementById('scoreDisplay').textContent = score;
+    score += (gender === 'boy' ? 20 : 40); // Kızlara zor olduğu için daha çok puan
   } else {
     btn.classList.add('wrong');
-    allBtns[q.ans].classList.add('correct');
+    btns[q.ans].classList.add('correct');
   }
-  
+  document.getElementById('displayScore').textContent = score;
   document.getElementById('nextBtn').style.display = 'block';
 }
 
-function nextQuestion(){
-  currentQ++;
-  loadQuestion();
-}
+function nextQuestion(){ currentQ++; loadQuestion(); }
 
 function endGame(){
-  document.getElementById('resultScore').textContent = score;
-  document.getElementById('resultMsg').textContent = `Tebrikler ${playerName}! Harika bir oyun çıkardın.`;
+  saveScore(playerName, score);
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('resultMsg').textContent = `${playerName}, veriler işlendi. Skorun sisteme kaydedildi.`;
   switchScreen('resultScreen');
 }
 
+// LEADERBOARD SİSTEMİ (LocalStorage)
+function saveScore(name, scr){
+  let scores = JSON.parse(localStorage.getItem('mathScores') || '[]');
+  scores.push({name: name, score: scr});
+  scores.sort((a,b) => b.score - a.score);
+  scores = scores.slice(0, 5);
+  localStorage.setItem('mathScores', JSON.stringify(scores));
+}
+
+function updateLeaderboardDisplay(){
+  const scores = JSON.parse(localStorage.getItem('mathScores') || '[]');
+  const container = document.getElementById('lbContent');
+  container.innerHTML = scores.length ? '' : '<div style="text-align:center; opacity:0.5">Henüz kayıt yok.</div>';
+  scores.forEach((s, i) => {
+    container.innerHTML += `<div class="lb-item"><span class="lb-rank">#${i+1}</span> <span>${s.name}</span> <span style="color:var(--neon-gold)">${s.score}</span></div>`;
+  });
+}
+
 function switchScreen(id){
-  document.getElementById('setupScreen').classList.add('hidden');
-  document.getElementById('gameScreen').classList.add('hidden');
-  document.getElementById('resultScreen').classList.add('hidden');
+  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
 
-function shuffle(arr){
-  return arr.sort(() => Math.random() - 0.5);
-}
+function shuffle(arr){ return arr.sort(() => Math.random() - 0.5); }
+
+// İlk açılışta leaderboard yükle
+updateLeaderboardDisplay();
 </script>
 </body>
 </html>
