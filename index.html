@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MathZone 7 | Pro Leaderboard</title>
+<title>MathZone 7 | Pro Edition</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -11,42 +11,44 @@
     --dark-bg: #050510; --card-bg: rgba(10,10,40,0.95); --border-glow: rgba(0,245,255,0.4);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: 'Rajdhani', sans-serif; background: var(--dark-bg); min-height: 100vh; color: #fff; overflow-x: hidden; }
-  
-  /* Arkaplan ve Animasyonlar */
-  .bg-grid { position: fixed; inset:0; z-index:0; background-image: linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px); background-size: 40px 40px; }
+  body { font-family: 'Rajdhani', sans-serif; background: var(--dark-bg); min-height: 100vh; overflow-x: hidden; color: #fff; }
+
+  /* --- ANIMATED BACKGROUND & PARTICLES --- */
+  .bg-grid { position: fixed; inset:0; z-index:0; background-image: linear-gradient(rgba(0,245,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,245,255,0.04) 1px, transparent 1px); background-size: 40px 40px; animation: gridMove 20s linear infinite; }
+  @keyframes gridMove { from{background-position:0 0} to{background-position:40px 40px} }
+  .particles { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  .particle { position:absolute; width:2px; height:2px; border-radius:50%; background:var(--neon-cyan); animation:particleFly linear infinite; }
+  @keyframes particleFly { 0%{transform:translateY(100vh) translateX(0); opacity:0} 100%{transform:translateY(-10vh) translateX(var(--dx)); opacity:0} }
+
+  /* --- UI COMPONENTS --- */
   .container { position: relative; z-index:10; max-width: 700px; margin:0 auto; padding: 20px; min-height: 100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-  .logo { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 8vw, 3rem); text-align: center; margin-bottom: 20px; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .logo { font-family: 'Orbitron', sans-serif; font-size: clamp(2rem, 8vw, 3.5rem); font-weight: 900; text-align: center; background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink), var(--neon-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px rgba(0,245,255,0.5)); margin-bottom: 20px; }
   
-  .card { background: var(--card-bg); border: 1px solid var(--border-glow); border-radius: 20px; padding: 30px; width: 100%; box-shadow: 0 0 30px rgba(0,245,255,0.1); backdrop-filter: blur(15px); }
+  .card { background: var(--card-bg); border: 1px solid var(--border-glow); border-radius: 20px; padding: 40px; width: 100%; box-shadow: 0 0 40px rgba(0,245,255,0.1); backdrop-filter: blur(20px); position: relative; overflow: hidden; }
   
-  /* Form ve Butonlar */
-  .field-label { display:block; font-family:'Bebas Neue'; letter-spacing:2px; color:var(--neon-cyan); margin: 15px 0 5px; }
-  .text-input { width:100%; padding:12px; background:rgba(255,255,255,0.05); border: 1px solid var(--border-glow); border-radius:8px; color:#fff; font-size:1.1rem; outline:none; }
-  .gender-row { display:flex; gap:10px; margin-top:10px; }
-  .gender-btn { flex:1; padding:12px; border:1px solid rgba(255,255,255,0.1); border-radius:10px; background:rgba(255,255,255,0.05); color:#fff; cursor:pointer; font-family:'Bebas Neue'; }
-  .gender-btn.selected { border-color:var(--neon-cyan); background:rgba(0,245,255,0.2); box-shadow: 0 0 15px var(--neon-cyan); }
-  .start-btn { width:100%; margin-top:20px; padding:15px; background: var(--neon-cyan); border:none; border-radius:10px; font-family:'Orbitron'; font-weight:700; cursor:pointer; color:#000; transition: 0.3s; }
-  .start-btn:hover { box-shadow: 0 0 20px var(--neon-cyan); }
+  /* --- JOKER & LEADERBOARD --- */
+  .joker-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 20px; }
+  .joker-btn { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--neon-gold); color: var(--neon-gold); padding: 8px 20px; border-radius: 30px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; transition: 0.3s; }
+  .joker-btn:hover:not(:disabled) { background: var(--neon-gold); color: #000; box-shadow: 0 0 15px var(--neon-gold); }
+  .joker-btn:disabled { opacity: 0.2; filter: grayscale(1); }
 
-  /* Leaderboard Style */
-  .leaderboard { margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); width: 100%; }
-  .lb-title { font-family: 'Orbitron'; font-size: 0.9rem; color: var(--neon-gold); text-align: center; margin-bottom: 10px; }
-  .lb-item { display: flex; justify-content: space-between; padding: 5px 10px; background: rgba(255,255,255,0.03); margin-bottom: 4px; border-radius: 5px; font-size: 0.9rem; }
-  .lb-rank { color: var(--neon-cyan); font-weight: bold; }
+  .leaderboard { margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+  .lb-title { font-family: 'Bebas Neue'; letter-spacing: 3px; color: var(--neon-gold); text-align: center; margin-bottom: 15px; }
+  .lb-row { display: flex; justify-content: space-between; padding: 8px 15px; background: rgba(255,255,255,0.03); margin-bottom: 5px; border-radius: 8px; font-size: 0.9rem; }
 
-  /* Oyun İçi */
-  .joker-btn { background: rgba(255,215,0,0.1); border: 1px solid var(--neon-gold); color: var(--neon-gold); padding: 5px 15px; border-radius: 20px; cursor: pointer; font-family: 'Orbitron'; font-size: 0.7rem; margin-bottom: 15px; }
-  .joker-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top: 15px; }
-  .option-btn { padding:15px; border:1px solid rgba(255,255,255,0.1); border-radius:8px; background:rgba(255,255,255,0.05); color:#fff; cursor:pointer; font-weight: 600; transition: 0.2s; }
-  .option-btn.correct { background: var(--neon-green) !important; color:#000; }
-  .option-btn.wrong { background: var(--neon-pink) !important; }
-  .hidden-opt { visibility: hidden; }
-  .next-btn { width:100%; margin-top:15px; padding:12px; background:transparent; border:1px solid var(--neon-cyan); color:var(--neon-cyan); border-radius:8px; display:none; cursor:pointer; }
+  /* --- GAME ELEMENTS --- */
+  .text-input { width:100%; padding:15px; background:rgba(0,245,255,0.05); border: 1px solid rgba(0,245,255,0.3); border-radius:10px; color:#fff; font-size:1.2rem; outline:none; transition: 0.3s; }
+  .gender-btn { flex:1; padding:20px; border:2px solid rgba(255,255,255,0.1); border-radius:14px; background:rgba(255,255,255,0.03); cursor:pointer; color:#fff; font-family:'Bebas Neue'; font-size:1.2rem; transition: 0.3s; }
+  .gender-btn.selected { border-color: var(--neon-cyan); background: rgba(0,245,255,0.15); box-shadow: 0 0 20px var(--neon-cyan); }
   
+  .option-btn { padding:18px; border:1px solid rgba(255,255,255,0.1); border-radius:12px; background:rgba(255,255,255,0.03); color:#fff; cursor:pointer; font-weight:600; font-family:'Rajdhani'; font-size:1.1rem; transition: 0.2s; }
+  .option-btn.correct { background: var(--neon-green) !important; color:#000; box-shadow: 0 0 20px var(--neon-green); }
+  .option-btn.wrong { background: var(--neon-pink) !important; box-shadow: 0 0 20px var(--neon-pink); }
+  .option-btn.hidden-opt { opacity: 0; pointer-events: none; }
+
+  .start-btn { width:100%; padding:18px; background: var(--neon-cyan); border:none; border-radius:12px; font-family:'Orbitron'; font-weight:900; cursor:pointer; margin-top:30px; color:#000; letter-spacing:2px; }
   .hidden { display: none !important; }
-  .fade-in { animation: fadeIn 0.4s ease; }
+  .fade-in { animation: fadeIn 0.5s ease; }
   @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:translateY(0)} }
 </style>
 </head>
@@ -55,98 +57,121 @@
 <audio id="bgMusic" src="song.mp3" loop></audio>
 
 <div class="bg-grid"></div>
+<div class="particles" id="particles"></div>
+
 <div class="container">
   <div class="logo">MATHZONE 7</div>
 
   <div class="card fade-in" id="setupScreen">
-    <label class="field-label">KULLANICI ADI</label>
-    <input class="text-input" type="text" id="nameInput" placeholder="İsminizi yazın...">
+    <label style="font-family:'Bebas Neue'; color:var(--neon-cyan); letter-spacing:2px;">KULLANICI ADI</label>
+    <input class="text-input" type="text" id="nameInput" placeholder="Sisteme bir isim girin..." maxlength="15">
     
-    <label class="field-label">CİNSİYET (ZORLUK SEÇİMİ)</label>
-    <div class="gender-row">
-      <button class="gender-btn" id="btnBoy" onclick="selectGender('boy')">ERKEK (KOLAY)</button>
-      <button class="gender-btn" id="btnGirl" onclick="selectGender('girl')">KIZ (ZOR)</button>
+    <div style="margin-top:25px; font-family:'Bebas Neue'; color:var(--neon-cyan); letter-spacing:2px;">ZORLUK SEVİYESİ (CİNSİYET)</div>
+    <div style="display:flex; gap:15px; margin-top:10px;">
+      <button class="gender-btn" id="btnBoy" onclick="selectGender('boy')">ERKEK<br><small style="font-size:0.6rem">KOLAY MOD</small></button>
+      <button class="gender-btn" id="btnGirl" onclick="selectGender('girl')">KIZ<br><small style="font-size:0.6rem">ZOR MOD</small></button>
     </div>
     
-    <button class="start-btn" onclick="startGame()">SİSTEME GİRİŞ YAP</button>
+    <button class="start-btn" onclick="startGame()">BAŞLAT</button>
 
     <div class="leaderboard">
-      <div class="lb-title">🏆 TOP 5 SKOR (YEREL)</div>
-      <div id="lbContent"></div>
+      <div class="lb-title">🏆 KÜRESEL SIRALAMA (YEREL)</div>
+      <div id="leaderboardList"></div>
     </div>
   </div>
 
   <div class="card hidden" id="gameScreen">
-    <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-        <span id="displayPlayer" style="color:var(--neon-cyan); font-family:'Bebas Neue'"></span>
-        <span id="displayScore" style="color:var(--neon-gold); font-family:'Orbitron'">0</span>
+    <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-family:'Orbitron'; font-size:0.9rem;">
+      <span id="playerDisplay" style="color:var(--neon-cyan)"></span>
+      <span id="scoreDisplay" style="color:var(--neon-gold)">000</span>
     </div>
+
+    <div class="joker-bar">
+      <button class="joker-btn" id="joker50" onclick="useJoker()">🎭 %50 JOKER HAKKI</button>
+    </div>
+
+    <div id="questionText" style="text-align:center; font-size:1.4rem; font-weight:700; min-height:100px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border-radius:15px; padding:20px; border:1px solid rgba(255,255,255,0.1);"></div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:25px;" id="optionsGrid"></div>
     
-    <button class="joker-btn" id="jokerBtn" onclick="useJoker()">🎭 %50 JOKER HAKKI</button>
-    
-    <div id="questionText" style="text-align:center; font-size:1.1rem; margin-bottom:20px; min-height:60px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.03); border-radius:10px; padding:10px;"></div>
-    
-    <div class="options-grid" id="optionsGrid"></div>
-    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">SIRADAKİ VERİ →</button>
+    <button class="start-btn" id="nextBtn" style="display:none; background:transparent; border:1px solid var(--neon-cyan); color:var(--neon-cyan);" onclick="nextQuestion()">SIRADAKİ SORU →</button>
   </div>
 
-  <div class="card hidden" id="resultScreen">
-    <div style="text-align:center">
-      <h2 style="font-family:'Orbitron'; color:var(--neon-gold)">GÖREV TAMAMLANDI</h2>
-      <div id="finalScore" style="font-size:3.5rem; margin:15px 0">0</div>
-      <p id="resultMsg" style="margin-bottom:20px"></p>
-      <button class="start-btn" onclick="location.reload()">TEKRAR BAŞLAT</button>
-    </div>
+  <div class="card hidden" id="geniusScreen" style="text-align:center;">
+    <h1 style="font-family:'Orbitron'; color:var(--neon-gold); margin-bottom:20px;">SİSTEM HATASI: 999</h1>
+    <p style="font-size:1.2rem;">Senin zekan bu testi aştı. Soruları çözmene gerek yok.</p>
+    <div style="font-size:4rem; margin:30px;">👑</div>
+    <button class="start-btn" onclick="location.reload()">TEKRAR DENE</button>
+  </div>
+
+  <div class="card hidden" id="resultScreen" style="text-align:center;">
+    <h2 style="font-family:'Orbitron'; color:var(--neon-gold)">TAMAMLANDI</h2>
+    <div id="finalScore" style="font-size:5rem; font-weight:900; margin:20px 0;">0</div>
+    <p id="resultMsg" style="margin-bottom:30px; opacity:0.8;"></p>
+    <button class="start-btn" onclick="location.reload()">YENİDEN BAŞLA</button>
   </div>
 </div>
 
 <script>
 let gender='', playerName='', currentQ=0, score=0, jokerUsed=false, questions=[];
+const VIP_NAMES = ['sadık','oguz234','aras','ege'];
 
-// Orijinal Sorular
+// --- SORU HAVUZLARI ---
 const EASY = [
-    {q:"x + 8 = 15 ise x?", opts:["5","6","7","8"], ans:2},
-    {q:"10 kg elma 50 TL ise 3 kg?", opts:["15","20","25","30"], ans:0},
-    {q:"3x = 27 ise x?", opts:["7","8","9","10"], ans:2},
-    {q:"12 kız, 12 erkek oranı?", opts:["1/1","1/2","2/3","3/4"], ans:0},
-    {q:"x/2 = 10 ise x?", opts:["5","10","15","20"], ans:3}
+  {q:"x + 5 = 12 ise x kaçtır?", opts:["5","6","7","8"], ans:2},
+  {q:"3x = 21 ise x kaçtır?", opts:["6","7","8","9"], ans:1},
+  {q:"10 tanesi 50 TL olan ürünün 3 tanesi?", opts:["15","20","25","30"], ans:0},
+  {q:"12/18 kesrinin en sade hali?", opts:["1/2","2/3","3/4","4/5"], ans:1},
+  {q:"x - 7 = 13 ise x kaçtır?", opts:["18","19","20","21"], ans:2},
+  {q:"2x + 4 = 10 ise x kaçtır?", opts:["2","3","4","5"], ans:1}
 ];
+
 const HARD = [
-    {q:"2x - 5 = 3x - 10 ise x?", opts:["3","4","5","6"], ans:2},
-    {q:"A:B = 2:3 ve B:C = 4:5 ise A:C?", opts:["8:15","1:2","3:5","2:5"], ans:0},
-    {q:"%20 indirimle 80 TL olan ürün?", opts:["90","100","110","120"], ans:1},
-    {q:"4 işçi 6 günde yaparsa, 3 işçi?", opts:["8","9","10","12"], ans:0},
-    {q:"(x+2)/3 = (x-1)/2 ise x?", opts:["5","6","7","8"], ans:2}
+  {q:"2(x-3) = 3x - 10 ise x kaçtır?", opts:["3","4","5","6"], ans:1},
+  {q:"A:B=2:3 ve B:C=4:5 ise A:C oranı?", opts:["8:15","2:5","3:5","4:15"], ans:0},
+  {q:"%20 kârla 120 TL olan bir malın maliyeti?", opts:["90","100","110","115"], ans:1},
+  {q:"(x+1)/2 = (x-2)/3 ise x kaçtır?", opts:["-7","-5","5","7"], ans:0},
+  {q:"4 işçinin 6 günde yaptığı işi 3 işçi?", opts:["8","9","10","12"], ans:0}
 ];
-const ULTRA = [
-    {q:"BOSS: 2(x-3) + 3(x+1) = 22?", opts:["3","4","5","6"], ans:2},
-    {q:"ULTRA: x/2 + x/3 = 10?", opts:["10","11","12","13"], ans:2}
-];
+
+// --- INITIALIZE PARTICLES ---
+function initParticles(){
+  const c = document.getElementById('particles');
+  for(let i=0; i<30; i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100+'%';
+    p.style.setProperty('--dx', (Math.random()-0.5)*200+'px');
+    p.style.animationDuration = (5+Math.random()*10)+'s';
+    p.style.animationDelay = Math.random()*5+'s';
+    c.appendChild(p);
+  }
+}
+initParticles();
 
 function selectGender(g){
-  gender=g;
+  gender = g;
   document.getElementById('btnBoy').classList.toggle('selected', g==='boy');
   document.getElementById('btnGirl').classList.toggle('selected', g==='girl');
 }
 
 function startGame(){
   playerName = document.getElementById('nameInput').value.trim();
-  if(!playerName || !gender) { alert("Kimlik ve Cinsiyet doğrulanmadı!"); return; }
-  
-  // Müzik
-  const m = document.getElementById('bgMusic');
-  m.volume = 0.4; m.play().catch(e=>console.log("Müzik aktif değil."));
+  if(!playerName || !gender) { alert("Erişim Reddedildi: Bilgileri eksiksiz girin."); return; }
 
-  // Gizli Zorluk ve Seçim Sistemi
-  if(playerName === '999'){
-    questions = shuffle([...ULTRA, ...HARD]);
-  } else {
-    questions = gender === 'boy' ? shuffle([...EASY]) : shuffle([...HARD]);
+  // MÜZİK
+  const m = document.getElementById('bgMusic');
+  m.volume = 0.4; m.play().catch(()=>console.log("Etkileşim gerekiyor."));
+
+  // GİZLİ SİSTEMLER (Zorluk & VIP)
+  if(VIP_NAMES.includes(playerName.toLowerCase()) || playerName === '999'){
+    switchScreen('geniusScreen');
+    return;
   }
 
-  document.getElementById('displayPlayer').textContent = playerName.toUpperCase();
+  questions = gender === 'boy' ? shuffle([...EASY]) : shuffle([...HARD]);
+  document.getElementById('playerDisplay').textContent = playerName.toUpperCase();
   switchScreen('gameScreen');
-  updateLeaderboardDisplay();
   loadQuestion();
 }
 
@@ -155,45 +180,43 @@ function loadQuestion(){
   const q = questions[currentQ];
   document.getElementById('questionText').textContent = q.q;
   document.getElementById('nextBtn').style.display = 'none';
+  document.getElementById('joker50').disabled = jokerUsed;
+  
   const grid = document.getElementById('optionsGrid');
   grid.innerHTML = '';
   q.opts.forEach((opt, i) => {
-    const b = document.createElement('button');
-    b.className = 'option-btn fade-in';
-    b.textContent = opt;
-    b.onclick = () => check(i, b);
-    grid.appendChild(b);
+    const btn = document.createElement('button');
+    btn.className = 'option-btn fade-in';
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(i, btn);
+    grid.appendChild(btn);
   });
-  document.getElementById('jokerBtn').disabled = jokerUsed;
 }
 
 function useJoker(){
   if(jokerUsed) return;
   const q = questions[currentQ];
   const btns = document.querySelectorAll('.option-btn');
-  let hidden = 0;
-  btns.forEach((b, i) => {
-    if(i !== q.ans && hidden < 2){
-      b.classList.add('hidden-opt');
-      hidden++;
-    }
-  });
+  let count = 0;
+  let indices = [0,1,2,3].filter(i => i !== q.ans);
+  shuffle(indices).slice(0, 2).forEach(idx => btns[idx].classList.add('hidden-opt'));
   jokerUsed = true;
-  document.getElementById('jokerBtn').disabled = true;
+  document.getElementById('joker50').disabled = true;
 }
 
-function check(idx, btn){
+function checkAnswer(idx, btn){
   const q = questions[currentQ];
   const btns = document.querySelectorAll('.option-btn');
   btns.forEach(b => b.disabled = true);
+  
   if(idx === q.ans){
     btn.classList.add('correct');
-    score += (gender === 'boy' ? 20 : 40); // Kızlara zor olduğu için daha çok puan
+    score += (gender === 'boy' ? 20 : 50); // Zor modda daha çok puan
   } else {
     btn.classList.add('wrong');
     btns[q.ans].classList.add('correct');
   }
-  document.getElementById('displayScore').textContent = score;
+  document.getElementById('scoreDisplay').textContent = score;
   document.getElementById('nextBtn').style.display = 'block';
 }
 
@@ -202,37 +225,33 @@ function nextQuestion(){ currentQ++; loadQuestion(); }
 function endGame(){
   saveScore(playerName, score);
   document.getElementById('finalScore').textContent = score;
-  document.getElementById('resultMsg').textContent = `${playerName}, veriler işlendi. Skorun sisteme kaydedildi.`;
+  document.getElementById('resultMsg').textContent = `${playerName}, performansın kaydedildi.`;
   switchScreen('resultScreen');
 }
 
-// LEADERBOARD SİSTEMİ (LocalStorage)
-function saveScore(name, scr){
-  let scores = JSON.parse(localStorage.getItem('mathScores') || '[]');
-  scores.push({name: name, score: scr});
-  scores.sort((a,b) => b.score - a.score);
-  scores = scores.slice(0, 5);
-  localStorage.setItem('mathScores', JSON.stringify(scores));
+// LEADERBOARD (Local Storage - GitHub Pages için en iyi çözüm)
+function saveScore(n, s){
+  let list = JSON.parse(localStorage.getItem('mz_scores') || '[]');
+  list.push({n, s});
+  list.sort((a,b) => b.s - a.s);
+  localStorage.setItem('mz_scores', JSON.stringify(list.slice(0, 5)));
+  updateLB();
 }
 
-function updateLeaderboardDisplay(){
-  const scores = JSON.parse(localStorage.getItem('mathScores') || '[]');
-  const container = document.getElementById('lbContent');
-  container.innerHTML = scores.length ? '' : '<div style="text-align:center; opacity:0.5">Henüz kayıt yok.</div>';
-  scores.forEach((s, i) => {
-    container.innerHTML += `<div class="lb-item"><span class="lb-rank">#${i+1}</span> <span>${s.name}</span> <span style="color:var(--neon-gold)">${s.score}</span></div>`;
-  });
+function updateLB(){
+  const list = JSON.parse(localStorage.getItem('mz_scores') || '[]');
+  const div = document.getElementById('leaderboardList');
+  div.innerHTML = list.map((x,i) => `<div class="lb-row"><span>#${i+1} ${x.n}</span><span>${x.s} PT</span></div>`).join('');
 }
 
 function switchScreen(id){
-  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+  ['setupScreen','gameScreen','resultScreen','geniusScreen'].forEach(s => document.getElementById(s).classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
 
-function shuffle(arr){ return arr.sort(() => Math.random() - 0.5); }
+function shuffle(a){ return a.sort(() => Math.random() - 0.5); }
 
-// İlk açılışta leaderboard yükle
-updateLeaderboardDisplay();
+updateLB(); // Başlangıçta listeyi yükle
 </script>
 </body>
 </html>
